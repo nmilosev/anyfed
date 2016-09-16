@@ -1,0 +1,169 @@
+#!/bin/sh
+
+# A script to quickly setup a Fedora chroot anywhere on anything
+# Please write to nmilosev@fedoraproject.org if you have problems
+# Source: https://github.com/nmilosev/anyfed
+# LICENSE: GPLv3
+
+# welcome message
+
+echo
+echo -e "Welcome to \e[94manyfed\e[39m!"
+echo "An universal Fedora chroot tool which lets you run Fedora anywhere on anything"
+echo -e "Version 0.1 (Fedora 24) - \e[94mhttps://github.com/nmilosev/anyfed\e[39m"
+echo -e "\e[94mnmilosev@fedoraproject.org\e[39m"
+echo "===================================================="
+echo "Please ensure that you have a recent versions of:"
+echo "    - wget"
+echo "    - tar"
+echo "on your \$PATH - busybox should work too!"
+echo "===================================================="
+echo
+
+# ensure we have wget and tar
+echo "Checking for tar and wget..."
+
+type wget >/dev/null 2>&1 || { echo >&2 "I require wget but it's not installed.  Aborting."; exit 1; }
+type tar >/dev/null 2>&1 || { echo >&2 "I require tar but it's not installed.  Aborting."; exit 1; }
+
+echo "All good!"
+
+# get arch
+echo "Which architecture you need? (armhfp, [x86_64])"
+read ARCH
+
+if [ -z "$ARCH" ]; then
+    ARCH="x86_64"
+fi
+
+echo "Using $ARCH Docker image"
+
+# set MIRROR for ARCH
+
+MIRROR="https://download.fedoraproject.org/pub/fedora/linux/releases/24/Docker/$ARCH/images/Fedora-Docker-Base-24-1.2.$ARCH.tar.xz"
+
+# create structure for rootfs
+
+echo "Where do you want anyfed to unpack itself (you have to have write permissions)? (press ENTER for '~/.anyfed')"
+
+read ANYFEDPATH
+
+if [ -z "$ANYFEDPATH" ]; then
+    ANYFEDPATH="/home/$USER/.anyfed"
+fi
+
+echo "Using path: $ANYFEDPATH"
+
+# if directory exists
+if [ -d "$ANYFEDPATH" ]; then
+    echo "$ANYFEDPATH already exists, press enter to overwrite or CTRL+C to abort."
+    read _
+    chown "$USER" "$ANYFEDPATH" -R
+    chmod +w -R "$ANYFEDPATH" 
+    rm -rf "$ANYFEDPATH"
+fi
+
+mkdir -p "$ANYFEDPATH"
+mkdir -p "$ANYFEDPATH/rootfs"
+touch "$ANYFEDPATH/anyfed" # file to enter chroot
+chmod +x "$ANYFEDPATH/anyfed"
+
+
+# get the image and unpack it in a subshell
+
+(
+    cd "$ANYFEDPATH"
+
+    echo "Download started..."
+
+    wget "$MIRROR"
+
+    echo "Download finished!"
+
+    echo "Extracting started..."
+
+    tar xf *.tar.xz --strip-components=1 --exclude json --exclude VERSION
+    cd "$ANYFEDPATH/rootfs"
+    tar xpf ../layer.tar
+
+    # cleanup
+    rm ../layer.tar
+    rm ../*.tar.xz
+
+    # fix dns server
+    echo "nameserver 8.8.8.8" > "$ANYFEDPATH/rootfs/etc/resolv.conf"
+
+    echo "Extracting finished!" 
+)
+
+# prepare the run file
+
+echo "Do you have root and sudo? ([Y]/N)"
+
+read HASROOT
+
+if [ -z "$HASROOT" ]; then
+    HASROOT="Y"
+fi
+
+if [ "$HASROOT" == "Y" ]; then
+    echo "Setting up script for chroot..."
+
+    # check if we have everything we need for a normal chroot 
+    type mount >/dev/null 2>&1 || { echo >&2 "I require mount but it's not installed.  Aborting."; exit 1; }
+    type umount >/dev/null 2>&1 || { echo >&2 "I require umount but it's not installed.  Aborting."; exit 1; }
+    type chroot >/dev/null 2>&1 || { echo >&2 "I require chroot but it's not installed.  Aborting."; exit 1; }
+
+cat > "$ANYFEDPATH/anyfed" <<- EOM
+    #!$(which sh)
+    echo "Entering anyfed Fedora 24 chroot..."
+
+    mount -t proc proc "$ANYFEDPATH/rootfs/proc"
+    mount -t sysfs sys "$ANYFEDPATH/rootfs/sys/"
+    mount -o bind /dev "$ANYFEDPATH/rootfs/dev"
+    mount -o bind /dev "$ANYFEDPATH/rootfs/dev/pts"
+
+    chroot "$ANYFEDPATH/rootfs" /bin/env -i \
+        HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' \
+        PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin \
+        /bin/bash --login
+
+    echo "Exiting anyfed Fedora 24 chroot..."
+    umount "$ANYFEDPATH/rootfs/dev/pts"
+    umount "$ANYFEDPATH/rootfs/dev"
+    umount "$ANYFEDPATH/rootfs/sys/"
+    umount "$ANYFEDPATH/rootfs/proc"
+    echo "Cleaned up..."
+EOM
+    
+else
+    echo "Setting up script for proot..."
+
+    if [ "$ARCH" == "x86_64" ]; then
+        PROOT_MIRROR="http://static.proot.me/proot-x86_64"
+    else
+        PROOT_MIRROR="http://static.proot.me/proot-arm"
+    fi
+
+    wget "$PROOT_MIRROR" -O "$ANYFEDPATH/proot" 
+    chmod +x "$ANYFEDPATH/proot"
+
+cat > "$ANYFEDPATH/anyfed" <<- EOM
+    #!$(which sh)
+    "$ANYFEDPATH/proot" -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /bin/env -i HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash --login
+EOM
+fi
+
+# all done!
+
+echo "Finished!"
+
+echo "Enter anyfed Fedora chroot by executing:"
+echo "$ANYFEDPATH/anyfed"
+echo
+echo "You can set up an alias with: alias anyfed='$ANYFEDPATH/anyfed'"
+echo "Use sudo if you have to."
+echo
+echo "--- Bye!"
+
+exit 0
