@@ -82,13 +82,14 @@ chmod +x "$ANYFEDPATH/anyfed"
 
     echo "Extracting started..."
 
-    tar xf *.tar.xz --strip-components=1 --exclude json --exclude VERSION
+    tar xf *.tar.xz --exclude json --exclude VERSION # more compatible with older tar versions
     cd "$ANYFEDPATH/rootfs"
     tar xpf ../*/layer.tar
 
     # cleanup
     rm ../*/layer.tar
     rm ../*.tar.xz
+    # TODO rm the empty docker directory
 
     # fix dns server
     echo "nameserver 8.8.8.8" > "$ANYFEDPATH/rootfs/etc/resolv.conf"
