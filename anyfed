@@ -83,12 +83,12 @@ chmod +x "$ANYFEDPATH/anyfed"
     echo "Extracting started..."
 
     tar xf *.tar.xz --exclude json --exclude VERSION # more compatible with older tar versions
+    rm *.tar.xz
+
     cd "$ANYFEDPATH/rootfs"
     tar xpf ../*/layer.tar
 
-    # cleanup
     rm ../*/layer.tar
-    rm ../*.tar.xz
     # TODO rm the empty docker directory
 
     # fix dns server
