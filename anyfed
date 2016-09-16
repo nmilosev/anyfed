@@ -12,12 +12,12 @@ echo -e "Welcome to \e[94manyfed\e[39m!"
 echo "An universal Fedora chroot tool which lets you run Fedora anywhere on anything"
 echo -e "Version 0.1 (Fedora 24) - \e[94mhttps://github.com/nmilosev/anyfed\e[39m"
 echo -e "\e[94mnmilosev@fedoraproject.org\e[39m"
-echo "===================================================="
+echo "======================================"
 echo "Please ensure that you have a recent versions of:"
 echo "    - wget"
 echo "    - tar"
 echo "on your \$PATH - busybox should work too!"
-echo "===================================================="
+echo "======================================"
 echo
 
 # ensure we have wget and tar
@@ -107,7 +107,7 @@ if [ -z "$HASROOT" ]; then
     HASROOT="Y"
 fi
 
-if [ "$HASROOT" == "Y" ]; then
+if [ "$HASROOT" = "Y" ]; then
     echo "Setting up script for chroot..."
 
     # check if we have everything we need for a normal chroot 
@@ -140,7 +140,7 @@ EOM
 else
     echo "Setting up script for proot..."
 
-    if [ "$ARCH" == "x86_64" ]; then
+    if [ "$ARCH" = "x86_64" ]; then
         PROOT_MIRROR="http://static.proot.me/proot-x86_64"
         PROOTPATH="$ANYFEDPATH/proot"
         wget "$PROOT_MIRROR" -O "$ANYFEDPATH/proot" 
@@ -159,7 +159,7 @@ else
             TERMUXPROOT="N"
         fi
 
-        if [ "$TERMUXPROOT" == "N" ]; then
+        if [ "$TERMUXPROOT" = "N" ]; then
             wget "$PROOT_MIRROR" -O "$ANYFEDPATH/proot" 
             chmod +x "$ANYFEDPATH/proot"
             PROOTPATH="$ANYFEDPATH/proot"
