@@ -49,7 +49,7 @@ echo "Where do you want anyfed to unpack itself (you have to have write permissi
 read ANYFEDPATH
 
 if [ -z "$ANYFEDPATH" ]; then
-    ANYFEDPATH="/home/$USER/.anyfed"
+    ANYFEDPATH="$HOME/.anyfed"
 fi
 
 echo "Using path: $ANYFEDPATH"
@@ -84,10 +84,10 @@ chmod +x "$ANYFEDPATH/anyfed"
 
     tar xf *.tar.xz --strip-components=1 --exclude json --exclude VERSION
     cd "$ANYFEDPATH/rootfs"
-    tar xpf ../layer.tar
+    tar xpf ../*/layer.tar
 
     # cleanup
-    rm ../layer.tar
+    rm ../*/layer.tar
     rm ../*.tar.xz
 
     # fix dns server
@@ -141,8 +141,27 @@ else
 
     if [ "$ARCH" == "x86_64" ]; then
         PROOT_MIRROR="http://static.proot.me/proot-x86_64"
+        PROOTPATH="$ANYFEDPATH/proot"
     else
         PROOT_MIRROR="http://static.proot.me/proot-arm"
+
+        echo "If you are on Android (Termux), proot-arm static library probably won't work."
+        echo "Please use the Termux built proot library: apt update && apt install proot"
+
+        echo "Do this now? (Y/[N])"
+
+        read TERMUXPROOT
+
+        if [ -z "$TERMUXPROOT" ]; then
+            TERMUXPROOT="N"
+        fi
+
+        if [ "$TERMUXPROOT" == "Y" ]; then
+            apt update && apt install proot
+            PROOTPATH="proot"
+        else    
+            PROOTPATH="$ANYFEDPATH/proot"
+        fi
     fi
 
     wget "$PROOT_MIRROR" -O "$ANYFEDPATH/proot" 
@@ -150,7 +169,7 @@ else
 
 cat > "$ANYFEDPATH/anyfed" <<- EOM
     #!$(which sh)
-    "$ANYFEDPATH/proot" -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /bin/env -i HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash --login
+    "$PROOTPATH" -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /bin/env -i HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash --login
 EOM
 fi
 

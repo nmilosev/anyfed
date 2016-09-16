@@ -22,6 +22,13 @@ wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && chmod +x
 
 and follow on-screen instructions
 
+# Tested on
+
+- LibreELEC (ARM) - with and without root
+- Fedora 24 x86_64 - with and without root
+- Ubuntu 16.04 - with and without root
+- Android 6.0 - without root, using Termux
+
 # License
 
 GPLv3
