@@ -12,15 +12,19 @@ Supported architectures:
 
 This uses a Fedora Docker image to set up a small rootfs somewhere on your system, so that you can chroot into it.
 
-It uses chroot if you have root, or proot if you dont.
+It uses ```chroot``` if you have root, or ```proot``` if you don't.
 
 # Usage
 
 ```
-wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && chmod +x anyfed && anyfed
+wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && chmod +x anyfed && ./anyfed
 ```
 
 and follow on-screen instructions
+
+# License
+
+GPLv3
 
 # Help
 
