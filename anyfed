@@ -4,6 +4,7 @@
 # Please write to nmilosev@fedoraproject.org if you have problems
 # Source: https://github.com/nmilosev/anyfed
 # LICENSE: GPLv3
+# Version: 0.1 rc3
 
 # welcome message
 
@@ -171,7 +172,12 @@ else
 
 cat > "$ANYFEDPATH/anyfed" <<- EOM
     #!$(which sh)
-    "$PROOTPATH" -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /bin/env -i HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash --login
+    echo "Entering anyfed Fedora 24 chroot..."
+
+    "$PROOTPATH" -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /usr/bin/env -i HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /usr/bin/bash --login
+
+    echo "Exiting anyfed Fedora 24 chroot..."
+    
 EOM
 fi
 

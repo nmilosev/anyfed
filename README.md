@@ -17,7 +17,7 @@ It uses ```chroot``` if you have root, or ```proot``` if you don't.
 # Usage
 
 ```
-wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && chmod +x anyfed && ./anyfed
+wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && bash anyfed
 ```
 
 and follow on-screen instructions
@@ -27,7 +27,7 @@ and follow on-screen instructions
 - LibreELEC (ARM) - with and without root
 - Fedora 24 x86_64 - with and without root
 - Ubuntu 16.04 - with and without root
-- Android 6.0 - without root, using Termux (update ```tar``` first, restart, and run ```sh anyfed``` when downloaded)
+- Android 6.0 - without root, using Termux (install ```tar``` first, restart and then run the script)
 
 # License
 
