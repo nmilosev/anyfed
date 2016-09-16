@@ -27,7 +27,7 @@ and follow on-screen instructions
 - LibreELEC (ARM) - with and without root
 - Fedora 24 x86_64 - with and without root
 - Ubuntu 16.04 - with and without root
-- Android 6.0 - without root, using Termux
+- Android 6.0 - without root, using Termux (update ```tar``` first, restart, and run ```sh anyfed``` when downloaded)
 
 # License
 

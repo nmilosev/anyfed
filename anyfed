@@ -143,6 +143,8 @@ else
     if [ "$ARCH" == "x86_64" ]; then
         PROOT_MIRROR="http://static.proot.me/proot-x86_64"
         PROOTPATH="$ANYFEDPATH/proot"
+        wget "$PROOT_MIRROR" -O "$ANYFEDPATH/proot" 
+        chmod +x "$ANYFEDPATH/proot"
     else
         PROOT_MIRROR="http://static.proot.me/proot-arm"
 
@@ -157,16 +159,15 @@ else
             TERMUXPROOT="N"
         fi
 
-        if [ "$TERMUXPROOT" == "Y" ]; then
+        if [ "$TERMUXPROOT" == "N" ]; then
+            wget "$PROOT_MIRROR" -O "$ANYFEDPATH/proot" 
+            chmod +x "$ANYFEDPATH/proot"
+            PROOTPATH="$ANYFEDPATH/proot"
+        else    
             apt update && apt install proot
             PROOTPATH="proot"
-        else    
-            PROOTPATH="$ANYFEDPATH/proot"
         fi
     fi
-
-    wget "$PROOT_MIRROR" -O "$ANYFEDPATH/proot" 
-    chmod +x "$ANYFEDPATH/proot"
 
 cat > "$ANYFEDPATH/anyfed" <<- EOM
     #!$(which sh)
