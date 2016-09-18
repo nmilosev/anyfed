@@ -30,6 +30,15 @@ and follow on-screen instructions
 - Arch Linux (2016-09) - with and without root
 - Android 6.0 - without root, using Termux (install ```tar``` and ```wget``` first, restart Termux and then run the script)
 
+# GUI applications
+
+You can run GUI applications with ```export DISPLAY=:0``` so they use your host X server. You also have to generate dbus-uuid ```dbus-uuidgen > /etc/machine-id```
+
+# Screenshots
+
+![](https://svbtleusercontent.com/vnfpef68jbt1w_small.png)
+![](https://svbtleusercontent.com/h2zz418lnfe7la_small.png)
+
 # License
 
 GPLv3
