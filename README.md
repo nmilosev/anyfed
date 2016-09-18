@@ -20,6 +20,10 @@ It uses ```chroot``` if you have root, or ```proot``` if you don't.
 wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && bash anyfed
 ```
 
+For Termux (Android):
+
+```apt update && apt install tar wget -y && export PATH=$PATH && wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && bash anyfed```
+
 and follow on-screen instructions
 
 # Tested on
@@ -28,7 +32,7 @@ and follow on-screen instructions
 - Fedora 24 x86_64 - with and without root
 - Ubuntu 16.04 - with and without root
 - Arch Linux (2016-09) - with and without root
-- Android 6.0 - without root, using Termux (```apt update && apt install tar wget -y && export PATH=$PATH && wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && bash anyfed```)
+- Android 6.0 - without root, using Termux (see instructions above)
 
 # GUI applications
 
