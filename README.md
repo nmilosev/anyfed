@@ -28,7 +28,7 @@ and follow on-screen instructions
 - Fedora 24 x86_64 - with and without root
 - Ubuntu 16.04 - with and without root
 - Arch Linux (2016-09) - with and without root
-- Android 6.0 - without root, using Termux (install ```tar``` and ```wget``` first, restart Termux and then run the script)
+- Android 6.0 - without root, using Termux (```apt update && apt install tar wget -y && export PATH=$PATH && wget https://raw.githubusercontent.com/nmilosev/anyfed/master/anyfed && bash anyfed)
 
 # GUI applications
 
