@@ -142,12 +142,12 @@ else
     echo "Setting up script for proot..."
 
     if [ "$ARCH" = "x86_64" ]; then
-        PROOT_MIRROR="http://static.proot.me/proot-x86_64"
+        PROOT_MIRROR="https://github.com/proot-me/proot-static-build/releases/download/v5.1.1/proot_5.1.1_x86_64_rc2"
         PROOTPATH="$ANYFEDPATH/proot"
         wget "$PROOT_MIRROR" -O "$ANYFEDPATH/proot" 
         chmod +x "$ANYFEDPATH/proot"
     else
-        PROOT_MIRROR="http://static.proot.me/proot-arm"
+        PROOT_MIRROR="https://github.com/proot-me/proot-static-build/raw/master/static/proot-arm"
 
         echo "If you are on Android (Termux), proot-arm static library probably won't work."
         echo "Please use the Termux built proot library: apt update && apt install proot"
