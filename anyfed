@@ -37,7 +37,7 @@ if [ -z "$ARCH" ]; then
     ARCH="x86_64"
 fi
 
-echo "Using $ARCH Docker image"
+echo "Using $ARCH Docker image:"
 
 # set MIRROR for ARCH
 
@@ -45,7 +45,9 @@ MIRROR="https://download.fedoraproject.org/pub/fedora/linux/releases/25/Docker/$
 
 # create structure for rootfs
 
-echo "Where do you want anyfed to unpack itself (you have to have write permissions)? (press ENTER for '~/.anyfed')"
+echo "URL: $MIRROR"
+
+echo "Where do you want anyfed to unpack itself (you have to have write permissions)? ([~/.anyfed])"
 
 read ANYFEDPATH
 

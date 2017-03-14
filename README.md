@@ -4,8 +4,6 @@ Welcome to anyfed!
 
 An universal Fedora chroot tool which lets you run Fedora anywhere on anything, with or without root.
 
-Version 0.1 (Fedora 24) - https://github.com/nmilosev/anyfed
-
 Supported architectures:
 - ARM
 - x86_64
@@ -29,6 +27,7 @@ and follow on-screen instructions
 # Tested on
 
 - LibreELEC (ARM) - with and without root
+- OpenELEC (ARM) - with and without root
 - Fedora 24 x86_64 - with and without root
 - Ubuntu 16.04 - with and without root
 - Arch Linux (2016-09) - with and without root
@@ -37,6 +36,8 @@ and follow on-screen instructions
 # GUI applications
 
 You can run GUI applications with ```export DISPLAY=:0``` so they use your host X server. You also have to generate dbus-uuid ```dbus-uuidgen > /etc/machine-id```
+
+You also may need ```xhost +``` on your host system.
 
 # Screenshots
 
