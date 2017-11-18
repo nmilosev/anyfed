@@ -41,8 +41,7 @@ echo "Using $ARCH Docker image:"
 
 # set MIRROR for ARCH
 
-MIRROR="https://download.fedoraproject.org/pub/fedora/linux/releases/27/Docker/$ARCH/images/ 	
-Fedora-Container-Minimal-Base-27-1.6.$ARCH.tar.xz"
+MIRROR="https://download.fedoraproject.org/pub/fedora/linux/releases/27/Docker/$ARCH/images/Fedora-Docker-Base-27-1.6.$ARCH.tar.xz"
 
 # create structure for rootfs
 
