@@ -30,7 +30,7 @@ type tar >/dev/null 2>&1 || { echo >&2 "I require tar but it's not installed.  A
 echo "All good!"
 
 # get arch
-echo "Which architecture you need? (armhfp, [x86_64])"
+echo "Which architecture you need? (armhfp, aarch64, [x86_64])"
 read ARCH
 
 if [ -z "$ARCH" ]; then
@@ -42,6 +42,10 @@ echo "Using $ARCH Docker image:"
 # set MIRROR for ARCH
 
 MIRROR="https://download.fedoraproject.org/pub/fedora/linux/releases/27/Docker/$ARCH/images/Fedora-Docker-Base-27-1.6.$ARCH.tar.xz"
+
+if [ "$ARCH" = "aarch64" ]; then
+    MIRROR="http://dl.fedoraproject.org/pub/fedora-secondary/releases/27/Docker/aarch64/images/Fedora-Docker-Base-27-1.6.aarch64.tar.xz"
+fi
 
 # create structure for rootfs
 
@@ -120,7 +124,7 @@ if [ "$HASROOT" = "Y" ]; then
 
 cat > "$ANYFEDPATH/anyfed" <<- EOM
     #!$(which sh)
-    echo "Entering anyfed Fedora 25 chroot..."
+    echo "Entering anyfed Fedora 27 chroot..."
 
     mount -t proc proc "$ANYFEDPATH/rootfs/proc"
     mount -t sysfs sys "$ANYFEDPATH/rootfs/sys/"
@@ -132,7 +136,7 @@ cat > "$ANYFEDPATH/anyfed" <<- EOM
         PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin \
         /bin/bash --login
 
-    echo "Exiting anyfed Fedora 25 chroot..."
+    echo "Exiting anyfed Fedora 27 chroot..."
     umount "$ANYFEDPATH/rootfs/dev/pts"
     umount "$ANYFEDPATH/rootfs/dev"
     umount "$ANYFEDPATH/rootfs/sys/"
@@ -175,11 +179,11 @@ else
 
 cat > "$ANYFEDPATH/anyfed" <<- EOM
     #!$(which sh)
-    echo "Entering anyfed Fedora 25 chroot..."
+    echo "Entering anyfed Fedora 27 chroot..."
 
     $PROOTPATH $LINKOPTIONS -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /usr/bin/env -i HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /usr/bin/bash --login
 
-    echo "Exiting anyfed Fedora 25 chroot..."
+    echo "Exiting anyfed Fedora 27 chroot..."
     
 EOM
 fi
