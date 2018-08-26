@@ -4,14 +4,13 @@
 # Please write to nmilosev@fedoraproject.org if you have problems
 # Source: https://github.com/nmilosev/anyfed
 # LICENSE: GPLv3
-# Version: 0.1 rc5
 
 # welcome message
 
 echo
 echo -e "Welcome to \e[94manyfed\e[39m!"
 echo "An universal Fedora chroot tool which lets you run Fedora anywhere on anything"
-echo -e "Version 0.1.1 (Fedora 27) - \e[94mhttps://github.com/nmilosev/anyfed\e[39m"
+echo -e "Version 0.1.2 (Fedora 28) - \e[94mhttps://github.com/nmilosev/anyfed\e[39m"
 echo -e "\e[94mnmilosev@fedoraproject.org\e[39m"
 echo "======================================"
 echo "Please ensure that you have a recent versions of:"
@@ -41,11 +40,7 @@ echo "Using $ARCH Docker image:"
 
 # set MIRROR for ARCH
 
-MIRROR="https://download.fedoraproject.org/pub/fedora/linux/releases/27/Docker/$ARCH/images/Fedora-Docker-Base-27-1.6.$ARCH.tar.xz"
-
-if [ "$ARCH" = "aarch64" ]; then
-    MIRROR="http://dl.fedoraproject.org/pub/fedora-secondary/releases/27/Docker/aarch64/images/Fedora-Docker-Base-27-1.6.aarch64.tar.xz"
-fi
+MIRROR="https://dl.fedoraproject.org/pub/fedora/linux/releases/28/Container/$ARCH/images/Fedora-Container-Base-28-1.1.$ARCH.tar.xz"
 
 # create structure for rootfs
 
@@ -124,7 +119,7 @@ if [ "$HASROOT" = "Y" ]; then
 
 cat > "$ANYFEDPATH/anyfed" <<- EOM
     #!$(which sh)
-    echo "Entering anyfed Fedora 27 chroot..."
+    echo "Entering anyfed Fedora 28 chroot..."
 
     mount -t proc proc "$ANYFEDPATH/rootfs/proc"
     mount -t sysfs sys "$ANYFEDPATH/rootfs/sys/"
@@ -136,7 +131,7 @@ cat > "$ANYFEDPATH/anyfed" <<- EOM
         PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin \
         /bin/bash --login
 
-    echo "Exiting anyfed Fedora 27 chroot..."
+    echo "Exiting anyfed Fedora 28 chroot..."
     umount "$ANYFEDPATH/rootfs/dev/pts"
     umount "$ANYFEDPATH/rootfs/dev"
     umount "$ANYFEDPATH/rootfs/sys/"
@@ -179,11 +174,11 @@ else
 
 cat > "$ANYFEDPATH/anyfed" <<- EOM
     #!$(which sh)
-    echo "Entering anyfed Fedora 27 chroot..."
+    echo "Entering anyfed Fedora 28 chroot..."
 
     $PROOTPATH $LINKOPTIONS -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /usr/bin/env -i HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /usr/bin/bash --login
 
-    echo "Exiting anyfed Fedora 27 chroot..."
+    echo "Exiting anyfed Fedora 28 chroot..."
     
 EOM
 fi
