@@ -42,6 +42,10 @@ echo "Using $ARCH Docker image:"
 
 MIRROR="https://dl.fedoraproject.org/pub/fedora/linux/releases/28/Container/$ARCH/images/Fedora-Container-Base-28-1.1.$ARCH.tar.xz"
 
+if [ "$ARCH" = "armhfp" ]; then
+    MIRROR="https://dl.fedoraproject.org/pub/fedora/linux/releases/28/Container/$ARCH/images/Fedora-Container-Minimal-Base-28-1.1.$ARCH.tar.xz"
+fi
+
 # create structure for rootfs
 
 echo "URL: $MIRROR"
