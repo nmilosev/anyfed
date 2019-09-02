@@ -42,10 +42,9 @@ echo "Using $ARCH Docker image:"
 
 MIRROR="https://dl.fedoraproject.org/pub/fedora/linux/releases/30/Container/$ARCH/images/Fedora-Container-Base-30-1.2.$ARCH.tar.xz"
 
-# Not supported anymore, uncomment for F28:
-# if [ "$ARCH" = "armhfp" ]; then
-#    MIRROR="https://dl.fedoraproject.org/pub/fedora/linux/releases/30/Container/$ARCH/images/Fedora-Container-Minimal-Base-28-1.1.$ARCH.tar.xz"
-# fi
+if [ "$ARCH" = "armhfp" ]; then
+    MIRROR="https://github.com/nmilosev/anyfed/raw/master/arm32v7_fedora.tar.xz"
+fi
 
 # create structure for rootfs
 

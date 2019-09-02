@@ -7,6 +7,7 @@ An universal Fedora chroot tool which lets you run Fedora anywhere on anything, 
 Supported architectures:
 - ARM64 (aarch64)
 - x86_64
+- ARM32 (armhfp) - from Docker Hub
 
 This uses a Fedora Docker image to set up a small rootfs somewhere on your system, so that you can chroot into it.
 
