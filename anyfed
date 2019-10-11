@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # A script to quickly setup a Fedora chroot anywhere on anything
 # Please write to nmilosev@fedoraproject.org if you have problems
