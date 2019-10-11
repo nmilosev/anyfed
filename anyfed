@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # A script to quickly setup a Fedora chroot anywhere on anything
 # Please write to nmilosev@fedoraproject.org if you have problems
@@ -29,7 +29,7 @@ type tar >/dev/null 2>&1 || { echo >&2 "I require tar but it's not installed.  A
 echo "All good!"
 
 # get arch
-echo "Which architecture you need? (aarch64, [x86_64])"
+echo "Which architecture you need? (aarch64, x86_64, armhfp)"
 read ARCH
 
 if [ -z "$ARCH" ]; then
@@ -42,7 +42,7 @@ echo "Using $ARCH Docker image:"
 
 MIRROR="https://dl.fedoraproject.org/pub/fedora/linux/releases/30/Container/$ARCH/images/Fedora-Container-Base-30-1.2.$ARCH.tar.xz"
 
-if [ "$ARCH" = "armhfp" ]; then
+if [[ "$ARCH" == "armhfp" ]]; then
     MIRROR="https://github.com/nmilosev/anyfed/raw/master/arm32v7_fedora.tar.xz"
 fi
 
@@ -94,8 +94,9 @@ chmod +x "$ANYFEDPATH/anyfed"
     cd "$ANYFEDPATH/rootfs"
     tar xpf ../*/layer.tar
 
-    rm ../*/layer.tar
-    # TODO rm the empty docker directory
+    cd ..
+    rm */layer.tar
+    rm -rf $(ls --ignore=anyfed --ignore=rootfs) # delete empty docker folder
 
     # fix dns server
     echo "nameserver 8.8.8.8" > "$ANYFEDPATH/rootfs/etc/resolv.conf"
@@ -122,25 +123,25 @@ if [ "$HASROOT" = "Y" ]; then
     type chroot >/dev/null 2>&1 || { echo >&2 "I require chroot but it's not installed.  Aborting."; exit 1; }
 
 cat > "$ANYFEDPATH/anyfed" <<- EOM
-    #!$(which sh)
-    echo "Entering anyfed Fedora chroot..."
+#!$(which bash)
 
-    mount -t proc proc "$ANYFEDPATH/rootfs/proc"
-    mount -t sysfs sys "$ANYFEDPATH/rootfs/sys/"
-    mount -o bind /dev "$ANYFEDPATH/rootfs/dev"
-    mount -o bind /dev "$ANYFEDPATH/rootfs/dev/pts"
+echo "Entering anyfed Fedora chroot..."
+mount -t proc proc "$ANYFEDPATH/rootfs/proc"
+mount -t sysfs sys "$ANYFEDPATH/rootfs/sys/"
+mount -o bind /dev "$ANYFEDPATH/rootfs/dev"
+mount -o bind /dev "$ANYFEDPATH/rootfs/dev/pts"
 
-    chroot "$ANYFEDPATH/rootfs" /bin/env -i \
-        HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' \
-        PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin \
-        /bin/bash --login
+chroot "$ANYFEDPATH/rootfs" /bin/env -i \
+HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' \
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin \
+/bin/bash --login
 
-    echo "Exiting anyfed Fedora chroot..."
-    umount "$ANYFEDPATH/rootfs/dev/pts"
-    umount "$ANYFEDPATH/rootfs/dev"
-    umount "$ANYFEDPATH/rootfs/sys/"
-    umount "$ANYFEDPATH/rootfs/proc"
-    echo "Cleaned up..."
+echo "Exiting anyfed Fedora chroot..."
+umount "$ANYFEDPATH/rootfs/dev/pts"
+umount "$ANYFEDPATH/rootfs/dev"
+umount "$ANYFEDPATH/rootfs/sys/"
+umount "$ANYFEDPATH/rootfs/proc"
+echo "Cleaned up..."
 EOM
     
 else
