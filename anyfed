@@ -40,7 +40,7 @@ echo "Using $ARCH Docker image:"
 
 # set MIRROR for ARCH
 
-MIRROR="https://dl.fedoraproject.org/pub/fedora/linux/releases/30/Container/$ARCH/images/Fedora-Container-Base-30-1.2.$ARCH.tar.xz"
+MIRROR="https://dl.fedoraproject.org/pub/fedora/linux/releases/33/Container/$ARCH/images/Fedora-Container-Base-33-1.2.$ARCH.tar.xz"
 
 if [ "$ARCH" = "armhfp" ]; then
     MIRROR="https://github.com/nmilosev/anyfed/raw/master/arm32v7_fedora.tar.xz"
@@ -55,7 +55,7 @@ echo "Where do you want anyfed to unpack itself (you have to have write permissi
 read ANYFEDPATH
 
 if [ -z "$ANYFEDPATH" ]; then
-    ANYFEDPATH="$HOME/.anyfed"
+    ANYFEDPATH="$HOME/.fedora"
 fi
 
 echo "Using path: $ANYFEDPATH"
@@ -121,7 +121,7 @@ if [ "$HASROOT" = "Y" ]; then
     type umount >/dev/null 2>&1 || { echo >&2 "I require umount but it's not installed.  Aborting."; exit 1; }
     type chroot >/dev/null 2>&1 || { echo >&2 "I require chroot but it's not installed.  Aborting."; exit 1; }
 
-cat > "$ANYFEDPATH/anyfed" <<- EOM
+cat > "$ANYFEDPATH/fedora" <<- EOM
     #!$(which sh)
     echo "Entering anyfed Fedora chroot..."
 
@@ -180,7 +180,7 @@ cat > "$ANYFEDPATH/anyfed" <<- EOM
     #!$(which sh)
     echo "Entering anyfed Fedora chroot..."
 
-    $PROOTPATH $LINKOPTIONS -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /usr/bin/env -i HOME=/root TERM="$TERM" PS1='[root@anyfed \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /usr/bin/bash --login
+    $PROOTPATH $LINKOPTIONS -0 -r "$ANYFEDPATH/rootfs" -b /dev/ -b /sys/ -b /proc/ -b $HOME /usr/bin/env -i HOME=/root TERM="$TERM" PS1='[root@fedora \W]\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /usr/bin/bash --login
 
     echo "Exiting anyfed Fedora chroot..."
     
@@ -192,9 +192,9 @@ fi
 echo "Finished!"
 
 echo "Enter anyfed Fedora chroot by executing:"
-echo "$ANYFEDPATH/anyfed"
+echo "$ANYFEDPATH/fedora"
 echo
-echo "You can set up an alias with: alias anyfed='$ANYFEDPATH/anyfed'"
+echo "You can set up an alias with: alias anyfed='$ANYFEDPATH/fedora'"
 echo "Use sudo if you have to."
 echo
 echo "--- Bye!"
